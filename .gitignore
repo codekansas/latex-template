@@ -1,11 +1,32 @@
-# .gitignore
-
-# Latex
-*.pdf
+# LaTeX build artifacts
 *.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
 *.fdb_latexmk
 *.fls
 *.synctex.gz
-*.bbl
-*.blg
-*.out
+
+# PDF output
+*.pdf
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
