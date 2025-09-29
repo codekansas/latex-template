@@ -1,0 +1,61 @@
+name: Build PDF
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up LaTeX
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: main.tex
+          latexmk_use_xelatex: false
+          latexmk_use_lualatex: false
+          latexmk_use_pdflatex: true
+          latexmk_args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+          pre_compile: |
+            # Install additional packages if needed
+            tlmgr update --self
+            tlmgr install collection-fontsrecommended
+            tlmgr install collection-latexextra
+            tlmgr install collection-bibtexextra
+            tlmgr install collection-mathscience
+            tlmgr install collection-pictures
+            tlmgr install collection-latexrecommended
+          post_compile: |
+            # Check if PDF was created successfully
+            if [ -f "main.pdf" ]; then
+              echo "PDF built successfully"
+              ls -la main.pdf
+            else
+              echo "PDF build failed"
+              exit 1
+            fi
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-pdf
+          path: main.pdf
+          retention-days: 30
+
+      - name: Upload PDF to release (on push to main/master)
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.repository.releases_url }}/releases
+          asset_path: ./main.pdf
+          asset_name: main.pdf
+          asset_content_type: application/pdf

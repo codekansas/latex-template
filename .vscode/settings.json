@@ -1,0 +1,9 @@
+{
+  "[tex]": {
+    "editor.defaultFormatter": "James-Yu.latex-workshop",
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
+  },
+  "editor.wordWrap": "bounded",
+  "editor.wordWrapColumn": 120
+}
