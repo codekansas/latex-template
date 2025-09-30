@@ -39,3 +39,10 @@ jobs:
               echo "PDF build failed"
               exit 1
             fi
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-document
+          path: main.pdf
+          retention-days: 30
